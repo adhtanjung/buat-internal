@@ -1,0 +1,2 @@
+pkg/config/envs/dev.env
+*.env
