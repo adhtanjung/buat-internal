@@ -37,12 +37,6 @@ func (a *AuthHandlerImpl) Register() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var body RegisterRequest
 		if err := ctx.ShouldBindJSON(&body); err != nil {
-			// var errorMessage string
-			// if s := utils.CustomValidateStruct(err); s != "" {
-			// 	errorMessage = utils.CustomValidateStruct(err)
-			// } else {
-			// 	errorMessage = err.Error()
-			// }
 			ctx.JSON(http.StatusBadRequest, RegisterResponse{
 				Status: http.StatusBadRequest,
 				Error:  utils.CustomValidateStruct(err),

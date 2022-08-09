@@ -14,8 +14,8 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	Status int32  `json:"status"`
-	Error  string `json:"error"`
+	Status int32               `json:"status"`
+	Error  []map[string]string `json:"errors"`
 }
 type Repository interface {
 	Register(auth RegisterRequest) error

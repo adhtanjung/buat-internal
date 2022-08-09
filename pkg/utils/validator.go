@@ -1,25 +1,37 @@
 package utils
 
 import (
-	"fmt"
+	// "fmt"
 
 	"github.com/go-playground/validator/v10"
 )
 
-func CustomValidateStruct(err error) string {
-	errMessage := err.Error()
+func CustomValidateStruct(err error) []map[string]string {
+	var errMess []map[string]string
+	errMess = []map[string]string{
+		{
+			"field": err.Error(),
+			"msg":   err.Error(),
+		},
+	}
 	if castedObject, ok := err.(validator.ValidationErrors); ok {
+		errMess = []map[string]string{}
 		for _, err := range castedObject {
 			switch err.Tag() {
 			case "required":
-				errMessage = fmt.Sprintf("%s is required", err.Field())
+				errMess = append(errMess, map[string]string{
+					"field": err.Field(),
+					"msg":   "field is required",
+				})
 			case "email":
-				errMessage = fmt.Sprintf("%s is not a valid email", err.Field())
-			default:
-				errMessage = fmt.Sprintf("%s is invalid", err.Field())
+				errMess = append(errMess, map[string]string{
+					"field": err.Field(),
+					"msg":   "not a valid email",
+				})
+				// default:
 			}
 		}
 	}
-	return errMessage
+	return errMess
 
 }

@@ -109,7 +109,13 @@
             "type": "object",
             "properties": {
                 "error": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
                 },
                 "status": {
                     "type": "integer"
@@ -135,7 +141,13 @@
             "type": "object",
             "properties": {
                 "error": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
                 },
                 "status": {
                     "type": "integer"
