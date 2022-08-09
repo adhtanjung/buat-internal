@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/adhtanjung/trackerstache_api/pkg/db"
 	"github.com/adhtanjung/trackerstache_api/pkg/models"
@@ -10,8 +9,8 @@ import (
 )
 
 type RegisterRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
 }
 
 type RegisterResponse struct {
@@ -19,7 +18,7 @@ type RegisterResponse struct {
 	Error  string `json:"error"`
 }
 type Repository interface {
-	Register(auth models.User) error
+	Register(auth RegisterRequest) error
 }
 
 type repository struct {
@@ -30,12 +29,11 @@ func NewRepository(h *db.Handler) Repository {
 	return &repository{H: h}
 }
 
-func (r *repository) Register(auth models.User) error {
+func (r *repository) Register(auth RegisterRequest) error {
 	var user models.User
-	// log.Println(req)
 
 	if result := r.H.DB.Where(models.User{Email: auth.Email}).First(&user); result.Error == nil {
-		return utils.NewError(http.StatusBadRequest, errors.New("Email already exists"))
+		return errors.New("email already exists")
 	}
 
 	user.Email = auth.Email
