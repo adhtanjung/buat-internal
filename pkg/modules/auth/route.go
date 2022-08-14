@@ -26,8 +26,7 @@ func (a *authRoute) Init(route *gin.RouterGroup) {
 	auth := route.Group("/auth")
 	{
 		auth.POST("/register", a.handler.Register())
-		// auth.POST("/login", a.handler.Login())
+		auth.POST("/login", a.handler.Login())
 	}
-	a.handler.Register()
 
 }

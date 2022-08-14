@@ -49,6 +49,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/login": {
+            "post": {
+                "description": "login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "User login",
+                "parameters": [
+                    {
+                        "description": "Login Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.WebResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.WebResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/register": {
             "post": {
                 "description": "Register a new user",
@@ -66,7 +109,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/pkg_modules_auth.RegisterRequest"
+                            "$ref": "#/definitions/models.RegisterRequest"
                         }
                     }
                 ],
@@ -74,19 +117,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pkg_modules_auth.RegisterResponse"
+                            "$ref": "#/definitions/models.RegisterResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/pkg_modules_auth.RegisterResponse"
+                            "$ref": "#/definitions/models.RegisterResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/pkg_modules_auth.RegisterResponse"
+                            "$ref": "#/definitions/models.RegisterResponse"
                         }
                     }
                 }
@@ -94,7 +137,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github.com_adhtanjung_trackerstache_api_pkg_modules_auth.RegisterRequest": {
+        "models.LoginRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -109,10 +152,36 @@ const docTemplate = `{
                 }
             }
         },
-        "github.com_adhtanjung_trackerstache_api_pkg_modules_auth.RegisterResponse": {
+        "models.LoginResponse": {
             "type": "object",
             "properties": {
-                "error": {
+                "status": {
+                    "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "errors": {
                     "type": "array",
                     "items": {
                         "type": "object",
@@ -120,39 +189,19 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                },
+                "message": {
+                    "type": "string"
                 },
                 "status": {
                     "type": "integer"
                 }
             }
         },
-        "pkg_modules_auth.RegisterRequest": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "pkg_modules_auth.RegisterResponse": {
+        "models.WebResponse": {
             "type": "object",
             "properties": {
-                "error": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
-                        }
-                    }
-                },
+                "data": {},
                 "status": {
                     "type": "integer"
                 }

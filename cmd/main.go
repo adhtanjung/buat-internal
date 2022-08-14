@@ -47,8 +47,8 @@ func main() {
 	authHandler := auth.NewAuthHandler(authRepo)
 	authRoute := auth.NewAuthRoute(v1, authHandler)
 	authRoute.Init(v1)
-	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	// url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	route.Run(c.Port)
 

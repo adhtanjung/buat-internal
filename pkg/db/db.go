@@ -34,7 +34,9 @@ func Init(url string) {
 	// }
 	log.Println("running migration")
 
-	db.AutoMigrate(&models.User{})
+	if err := db.AutoMigrate(&models.User{}); err != nil {
+		log.Println("migration error", err)
+	}
 
 	log.Println("migration success")
 	DB = Handler{DB: db}

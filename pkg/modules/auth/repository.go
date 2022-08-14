@@ -8,17 +8,9 @@ import (
 	"github.com/adhtanjung/trackerstache_api/pkg/utils"
 )
 
-type RegisterRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
-}
-
-type RegisterResponse struct {
-	Status int32               `json:"status"`
-	Error  []map[string]string `json:"errors"`
-}
 type Repository interface {
-	Register(auth RegisterRequest) error
+	Register(auth models.RegisterRequest) error
+	Login(body models.LoginRequest) (models.User, error)
 }
 
 type repository struct {
@@ -29,7 +21,7 @@ func NewRepository(h *db.Handler) Repository {
 	return &repository{H: h}
 }
 
-func (r *repository) Register(auth RegisterRequest) error {
+func (r *repository) Register(auth models.RegisterRequest) error {
 	var user models.User
 
 	if result := r.H.DB.Where(models.User{Email: auth.Email}).First(&user); result.Error == nil {
@@ -42,4 +34,19 @@ func (r *repository) Register(auth RegisterRequest) error {
 	r.H.DB.Create(&user)
 
 	return nil
+}
+
+func (r *repository) Login(body models.LoginRequest) (models.User, error) {
+	var user models.User
+	db := r.H.DB
+	if result := db.Where("email = ?", body.Email).First(&user); result.Error != nil {
+		return user, errors.New("user not found")
+	}
+	passCheck := utils.CheckPasswordHash(body.Password, user.Password)
+
+	if !passCheck {
+		return user, errors.New("incorrect password ")
+	}
+
+	return user, nil
 }
